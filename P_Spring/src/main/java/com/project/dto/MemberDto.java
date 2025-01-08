@@ -1,38 +1,33 @@
 package com.project.dto;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 public class MemberDto {
+    
+    private Boolean a_authority;
+    private Boolean p_authority;
+    private Boolean e_authority;
+    private String m_id;
+    private String m_pw;
+    private Integer m_key; // m_key 필드 추가
 
-    // 데이터베이스 연결 정보
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/post_underdog";  // 데이터베이스 URL
-    private static final String DB_USER = "root"; // 데이터베이스 사용자 이름
-    private static final String DB_PASSWORD = "root"; // 데이터베이스 비밀번호
-    private static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver"; // MySQL JDBC 드라이버
-
-    // 데이터베이스 연결을 관리하는 메서드
-    public static Connection getConnection() throws SQLException {
-        try {
-            // MySQL JDBC 드라이버 로딩
-            Class.forName(JDBC_DRIVER);
-            // 데이터베이스 연결
-            return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            throw new SQLException("JDBC 드라이버 로딩 실패", e);
-        }
+    public MemberDto(Boolean a_authority, Boolean p_authority, Boolean e_authority, String m_id, String m_pw, Integer m_key) {
+        this.a_authority = a_authority;
+        this.p_authority = p_authority;
+        this.e_authority = e_authority;
+        this.m_id = m_id;
+        this.m_pw = m_pw;
+        this.m_key = m_key;
     }
 
-    // 연결 종료를 위한 메서드 (필요시 사용)
-    public static void closeConnection(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	public MemberDto(Boolean a_authority, Boolean p_authority, Boolean e_authority, String m_pw) {
+		this.a_authority = a_authority;
+		this.p_authority = p_authority;
+		this.e_authority = e_authority;
+		this.m_pw = m_pw;
+	}
+    
 }
