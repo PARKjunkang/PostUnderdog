@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Order from './Order'; // Order.js import
 
 const OrderMenu = () => {
   const [savedOrder, setSavedOrder] = useState(null);
 
-  // 발주 저장된 데이터를 부모로 전달받기
-  const handleSaveOrder = (orderData) => {
-    setSavedOrder(orderData);
+  // 로컬 스토리지에서 발주 데이터 로드
+  const loadOrderFromStorage = () => {
+    const orderData = localStorage.getItem("savedOrder");
+    if (orderData) {
+      setSavedOrder(JSON.parse(orderData));
+    }
   };
 
-  // 팝업을 여는 함수
-  const openOrderPopup = () => {
-    // 전체 화면 크기와 위치 설정
-    const popupFeatures = `width=${window.innerWidth},height=${window.innerHeight},top=0,left=0,resizable=yes,scrollbars=yes`;
+  useEffect(() => {
+    loadOrderFromStorage(); // 컴포넌트가 마운트될 때 데이터 로드
+  }, []);
 
-    // 팝업 창 열기
-    window.open(
-      "../order", // 팝업으로 열 URL (현재 'order' 페이지)
-      "상품 발주", // 팝업 창 이름
-      popupFeatures
-    );
+  const openOrderPopup = () => {
+    const popupFeatures = `width=${window.innerWidth},height=${window.innerHeight},top=0,left=0,resizable=yes,scrollbars=yes`;
+    const popup = window.open("../order", "상품 발주", popupFeatures);
+
+    // 팝업이 닫힐 때 로컬 스토리지 데이터를 로드
+    const interval = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(interval);
+        loadOrderFromStorage();
+      }
+    }, 500);
   };
 
   return (

@@ -43,11 +43,15 @@ const Order = ({ onSaveOrder }) => {
       items,
       total: calculateTotal(),
     };
-
-    // 부모 컴포넌트로 데이터 전달
-    onSaveOrder(orderData); // 부모 컴포넌트에 저장된 발주 데이터 전달
-
-    alert("발주 데이터가 저장되었습니다!\n" + JSON.stringify(orderData, null, 2));
+  
+    // 로컬 스토리지에 데이터 저장
+    localStorage.setItem("savedOrder", JSON.stringify(orderData));
+  
+    // 데이터를 띄우지 않고 메시지만 표시
+    alert("발주 데이터가 저장되었습니다!");
+  
+    // 팝업 닫기
+    window.close();
   };
 
   const toggleSelectItem = (id) => {
